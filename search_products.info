@@ -1,0 +1,3 @@
+name = Search Oukamy Products
+description = Affiche un bloc de recherche personnalisé pour les produits
+core = 7.x

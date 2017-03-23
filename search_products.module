@@ -1,0 +1,76 @@
+<?php
+/**
+* Implements hook_block_info().
+*/
+function search_products_block_info() {
+    $blocks['search_products'] = array(
+    // The name that will appear in the block list.
+      'info' => t('Search Products'),
+    // Default setting.
+       'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+return $blocks;
+}
+
+/**
+* Implements hook_block_view().
+*/
+function search_products_block_view($delta='') {
+  $block = array();
+    switch($delta) {
+        case 'search_products' :
+        $block['content'] = search_render();
+        break;
+    }
+  return $block;
+}
+//creation du formulaire
+function search_products_form($form, &$form_state) {
+
+    // Provide a text field.
+    $form['produit'] = array(
+        //'#title' => t('Your full name'),
+        '#type' => 'textfield',
+        '#placeholder' => t('Rechercher produits, marques, catégories ....'),
+        '#required' => TRUE,
+    );
+    // Provide a submit button.
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Rechercher',
+    );
+
+    return $form;
+}
+//validation du formulaire
+function search_products_form_validate($form, &$form_state) {
+
+}
+//envoie des données
+function search_products_form_submit($form, &$form_state) {
+
+    $title_prod = &$form_state['values']['produit'];
+    //$form_state['redirect'] = 'search-products?title=' . trim($title_prod). $url ;
+    $form_state['redirect'] = array(
+        'search-products',
+        array('query' => array(
+            'title' => trim($title_prod),
+            'field_categorie_produit_tid' => 'All',
+            'commerce_price_amount%5Bmin%5D' => '500',
+            'commerce_price_amount%5Bmax%5D' => '50000'
+        )));
+}
+
+#rendu ou affichage du formulaire
+function search_render(){
+    $arr = drupal_get_form('search_products_form');
+    return drupal_render($arr);
+}
+
+
+
+
+
+
+
+
